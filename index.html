@@ -3,61 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Danh sách đã đăng kí</title>
+  <title>Danh sách đăng kí Đoàn</title>
   <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --green: #16a34a;
+      --green-bg: #dcfce7;
+      --red: #dc2626;
+      --red-bg: #fee2e2;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --bg: #f8fafc;
+      --card: rgba(255,255,255,.92);
+      --shadow: 0 20px 50px rgba(15, 23, 42, .12);
+    }
+
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(22,163,74,.14), transparent 25%),
+        var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      background: linear-gradient(135deg, #e0f2fe, #f8fafc 45%, #dbeafe);
-      color: #0f172a;
-      padding: 28px 14px;
     }
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0;
     }
 
-    .header {
-      background: linear-gradient(135deg, #0f4c81, #1d4ed8);
+    .hero {
+      background: linear-gradient(135deg, #1e40af, #2563eb 48%, #38bdf8);
       color: white;
-      border-radius: 22px;
-      padding: 30px;
-      box-shadow: 0 18px 40px rgba(15, 76, 129, 0.25);
+      border-radius: 26px;
+      padding: 32px;
+      box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
     }
 
-    .header::after {
+    .hero::after {
       content: "";
-      position: absolute;
-      width: 220px;
-      height: 220px;
+      width: 260px;
+      height: 260px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.12);
-      right: -70px;
-      top: -80px;
+      background: rgba(255,255,255,.16);
+      position: absolute;
+      right: -90px;
+      top: -100px;
     }
 
-    .header h1 {
-      font-size: clamp(26px, 4vw, 42px);
-      margin-bottom: 10px;
-      letter-spacing: 0.5px;
-      position: relative;
-      z-index: 2;
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4vw, 44px);
+      letter-spacing: -.03em;
     }
 
-    .header p {
+    .hero p {
+      margin: 0;
       font-size: 16px;
-      opacity: 0.95;
-      position: relative;
-      z-index: 2;
+      opacity: .92;
     }
 
     .stats {
@@ -68,304 +82,667 @@
     }
 
     .stat-card {
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      background: var(--card);
+      border: 1px solid rgba(226,232,240,.9);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
     }
 
     .stat-card span {
-      display: block;
-      color: #64748b;
+      color: var(--muted);
       font-size: 14px;
-      margin-bottom: 8px;
+      font-weight: 700;
     }
 
     .stat-card strong {
-      font-size: 28px;
-      color: #1d4ed8;
+      display: block;
+      margin-top: 8px;
+      font-size: 34px;
+      line-height: 1;
     }
 
     .toolbar {
-      background: white;
-      padding: 18px;
-      border-radius: 18px;
-      display: flex;
+      background: var(--card);
+      border: 1px solid rgba(226,232,240,.9);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
       gap: 12px;
       align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
       margin-bottom: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      backdrop-filter: blur(12px);
     }
 
-    .search-box {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f1f5f9;
-      border-radius: 14px;
-      padding: 12px 14px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .search-box input {
+    .search {
       width: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: 15px;
-      color: #0f172a;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-      padding: 12px 16px;
+      border: 1px solid var(--line);
       border-radius: 14px;
+      padding: 13px 15px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+
+    .search:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
+    }
+
+    .select,
+    .btn {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 13px 15px;
+      font-size: 15px;
+      background: #fff;
+      cursor: pointer;
       font-weight: 700;
-      color: white;
-      background: #1d4ed8;
-      transition: 0.2s;
       white-space: nowrap;
     }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 18px rgba(29, 78, 216, 0.25);
+    .btn {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      transition: .2s ease;
     }
 
-    .btn-green {
-      background: #059669;
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
     }
 
     .table-card {
-      background: white;
-      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid rgba(226,232,240,.9);
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
-      border: 1px solid rgba(148, 163, 184, 0.22);
+      box-shadow: var(--shadow);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      background: white;
     }
 
-    thead {
-      background: #0f4c81;
-      color: white;
-    }
-
-    th, td {
-      padding: 15px 18px;
+    thead th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 14px;
       text-align: left;
-      border-bottom: 1px solid #e2e8f0;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: .03em;
     }
 
-    th:first-child, td:first-child {
-      width: 90px;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    tbody tr {
-      transition: 0.18s;
+    tbody td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #eef2f7;
+      font-size: 15px;
+      vertical-align: middle;
     }
 
     tbody tr:hover {
-      background: #eff6ff;
+      background: #f8fafc;
+    }
+
+    .stt {
+      width: 76px;
+      color: var(--muted);
+      font-weight: 800;
     }
 
     .name {
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
+      font-weight: 800;
+      color: #111827;
     }
 
     .badge {
-      display: inline-block;
-      background: #dcfce7;
-      color: #166534;
-      padding: 7px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
       border-radius: 999px;
+      font-weight: 800;
       font-size: 13px;
-      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.done {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .badge.wait {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 14px;
+      text-align: right;
     }
 
     .empty {
-      text-align: center;
-      padding: 26px;
-      color: #64748b;
       display: none;
-    }
-
-    .footer {
+      padding: 28px;
       text-align: center;
-      margin-top: 18px;
-      color: #64748b;
-      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
     }
 
-    @media (max-width: 760px) {
-      body {
-        padding: 16px 10px;
-      }
-
-      .header {
-        padding: 22px;
-      }
-
+    @media (max-width: 820px) {
       .stats {
         grid-template-columns: 1fr;
       }
 
       .toolbar {
-        flex-direction: column;
-        align-items: stretch;
+        grid-template-columns: 1fr;
+        position: static;
       }
 
-      .buttons {
-        flex-direction: column;
+      .table-card {
+        overflow-x: auto;
       }
 
-      th, td {
-        padding: 13px 10px;
-        font-size: 14px;
-      }
-
-      th:first-child, td:first-child {
-        width: 58px;
+      table {
+        min-width: 760px;
       }
     }
 
     @media print {
       body {
         background: white;
-        padding: 0;
       }
 
-      .header, .toolbar, .stats, .footer {
+      .hero,
+      .toolbar,
+      .footer-note {
         box-shadow: none;
       }
 
-      .toolbar, .footer {
+      .toolbar {
         display: none;
       }
 
-      .header {
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+
+      .hero {
         color: #000;
         background: white;
-        border: 1px solid #000;
-        border-radius: 0;
+        border: 1px solid #ddd;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
       }
 
       .table-card {
         box-shadow: none;
-        border: none;
-        border-radius: 0;
-      }
-
-      thead {
-        background: #ddd !important;
-        color: #000 !important;
+        border: 1px solid #ddd;
       }
     }
   </style>
 </head>
 <body>
-  <main class="container">
-    <section class="header">
-      <h1>Danh sách đã đăng kí</h1>
-      <p>Quản lý danh sách người đã đăng kí nhanh, rõ ràng và dễ tra cứu.</p>
+  <main class="page">
+    <section class="hero">
+      <h1>Danh sách đăng kí Đoàn</h1>
+      <p>Quản lý trạng thái đăng kí theo danh sách lớp. Người đã có trong danh sách đăng kí sẽ hiển thị “Đã đăng kí”.</p>
     </section>
 
     <section class="stats">
       <div class="stat-card">
-        <span>Tổng số người</span>
-        <strong id="totalCount">27</strong>
+        <span>Tổng danh sách</span>
+        <strong id="totalCount">47</strong>
       </div>
       <div class="stat-card">
-        <span>Trạng thái</span>
-        <strong>Đã đăng kí</strong>
+        <span>Đã đăng kí</span>
+        <strong id="doneCount">28</strong>
       </div>
       <div class="stat-card">
-        <span>Ngày cập nhật</span>
-        <strong id="todayText"></strong>
+        <span>Chưa đăng kí</span>
+        <strong id="waitCount">19</strong>
       </div>
     </section>
 
     <section class="toolbar">
-      <div class="search-box">
-        <span>🔎</span>
-        <input id="searchInput" type="text" placeholder="Nhập tên cần tìm..." />
-      </div>
-      <div class="buttons">
-        <button onclick="window.print()">In danh sách</button>
-        <button class="btn-green" onclick="exportCSV()">Xuất CSV</button>
-      </div>
+      <input id="searchInput" class="search" type="text" placeholder="Tìm theo họ tên..." />
+      <select id="statusFilter" class="select">
+        <option value="all">Tất cả trạng thái</option>
+        <option value="done">Đã đăng kí</option>
+        <option value="wait">Chưa đăng kí</option>
+      </select>
+      <button class="btn" onclick="window.print()">In danh sách</button>
+      <button class="btn" onclick="exportCSV()">Xuất CSV</button>
     </section>
 
     <section class="table-card">
       <table>
         <thead>
           <tr>
-            <th>STT</th>
-            <th>Họ và tên</th>
+            <th class="stt">STT</th>
+            <th>Họ và đệm</th>
+            <th>Tên</th>
+            <th>Họ tên đầy đủ</th>
             <th>Trạng thái</th>
           </tr>
         </thead>
-        <tbody id="studentTable"></tbody>
+        <tbody id="tableBody"></tbody>
       </table>
-      <div id="emptyText" class="empty">Không tìm thấy tên phù hợp.</div>
+      <div id="emptyState" class="empty">Không tìm thấy dữ liệu phù hợp.</div>
     </section>
 
-    <div class="footer">© Danh sách đã đăng kí - Thiết kế HTML/CSS/JavaScript</div>
+    <div class="footer-note">Cập nhật: 11/06/2026 16:50</div>
   </main>
 
   <script>
-    const danhSach = [
-      "ĐOÀN DUY MẠNH",
-      "NGUYỄN VĂN MẠNH",
-      "ĐOÀN ĐÌNH HẬU",
-      "PHÍ TRƯỜNG GIANG",
-      "NGUYỄN NGỌC HIỆP",
-      "LÊ DUY HÒA",
-      "TRẦN HẬU HUÂN",
-      "LƯƠNG QUANG HUY",
-      "NGUYỄN ĐÌNH HUY",
-      "LÂM DUY KHÁNH",
-      "NGỌC MINH KIÊN",
-      "TRẦN VĂN LÂM",
-      "VŨ VIỆT LONG",
-      "NGUYỄN MẠNH ĐIỀM",
-      "NGUYỄN VỌNG",
-      "ĐÀO ĐỨC PHONG",
-      "VƯƠNG TRỌNG HẢI QUÂN",
-      "LƯƠNG QUỐC BẢO",
-      "LÊ ANH SƠN",
-      "NGUYỄN MINH SƠN",
-      "TRẦN ĐỨC THANH",
-      "HOÀNG VĂN THI",
-      "NGUYỄN VĂN THUYẾT",
-      "NGUYỄN TIẾN LỰC",
-      "NGUYỄN THÀNH TRUNG",
-      "VŨ ANH TUẤN",
-      "VŨ DUY MẠNH"
-    ];
+    const people = [
+  {
+    "stt": 1,
+    "hoDem": "Nguyễn Nam",
+    "ten": "Anh",
+    "hoTen": "Nguyễn Nam Anh",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 2,
+    "hoDem": "Lương Quốc",
+    "ten": "Bảo",
+    "hoTen": "Lương Quốc Bảo",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 3,
+    "hoDem": "Nguyễn Minh",
+    "ten": "Chiến",
+    "hoTen": "Nguyễn Minh Chiến",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 4,
+    "hoDem": "Vũ Chí",
+    "ten": "Công",
+    "hoTen": "Vũ Chí Công",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 5,
+    "hoDem": "Nguyễn Quốc",
+    "ten": "Đạt",
+    "hoTen": "Nguyễn Quốc Đạt",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 6,
+    "hoDem": "Nguyễn Mạnh",
+    "ten": "Điềm",
+    "hoTen": "Nguyễn Mạnh Điềm",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 7,
+    "hoDem": "Dương Ngọc",
+    "ten": "Đông",
+    "hoTen": "Dương Ngọc Đông",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 8,
+    "hoDem": "Nguyễn Tiến",
+    "ten": "Dũng",
+    "hoTen": "Nguyễn Tiến Dũng",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 9,
+    "hoDem": "Bùi Đức",
+    "ten": "Dương",
+    "hoTen": "Bùi Đức Dương",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 10,
+    "hoDem": "Hoàng Đình",
+    "ten": "Duy",
+    "hoTen": "Hoàng Đình Duy",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 11,
+    "hoDem": "Nguyễn Hà",
+    "ten": "Giang",
+    "hoTen": "Nguyễn Hà Giang",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 12,
+    "hoDem": "Phí Trường",
+    "ten": "Giang",
+    "hoTen": "Phí Trường Giang",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 13,
+    "hoDem": "Nguyễn Kim Hoàng",
+    "ten": "Giang",
+    "hoTen": "Nguyễn Kim Hoàng Giang",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 14,
+    "hoDem": "Đoàn Đình",
+    "ten": "Hậu",
+    "hoTen": "Đoàn Đình Hậu",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 15,
+    "hoDem": "Nguyễn Ngọc",
+    "ten": "Hiệp",
+    "hoTen": "Nguyễn Ngọc Hiệp",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 16,
+    "hoDem": "Lê Minh",
+    "ten": "Hiếu",
+    "hoTen": "Lê Minh Hiếu",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 17,
+    "hoDem": "Lê Trung",
+    "ten": "Hiếu",
+    "hoTen": "Lê Trung Hiếu",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 18,
+    "hoDem": "Lê Duy",
+    "ten": "Hòa",
+    "hoTen": "Lê Duy Hòa",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 19,
+    "hoDem": "Nguyễn Huy",
+    "ten": "Hoàng",
+    "hoTen": "Nguyễn Huy Hoàng",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 20,
+    "hoDem": "Nguyễn Huy",
+    "ten": "Hoàng",
+    "hoTen": "Nguyễn Huy Hoàng",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 21,
+    "hoDem": "Trần Hậu",
+    "ten": "Huân",
+    "hoTen": "Trần Hậu Huân",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 22,
+    "hoDem": "Ngọ Quang",
+    "ten": "Huy",
+    "hoTen": "Ngọ Quang Huy",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 23,
+    "hoDem": "Lương Quang",
+    "ten": "Huy",
+    "hoTen": "Lương Quang Huy",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 24,
+    "hoDem": "Nguyễn Đình",
+    "ten": "Huy",
+    "hoTen": "Nguyễn Đình Huy",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 25,
+    "hoDem": "Nguyễn Quốc",
+    "ten": "Huy",
+    "hoTen": "Nguyễn Quốc Huy",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 26,
+    "hoDem": "Lâm Duy",
+    "ten": "Khánh",
+    "hoTen": "Lâm Duy Khánh",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 27,
+    "hoDem": "Ngọc Minh",
+    "ten": "Kiên",
+    "hoTen": "Ngọc Minh Kiên",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 28,
+    "hoDem": "Nguyễn Phạm Hồng",
+    "ten": "Lâm",
+    "hoTen": "Nguyễn Phạm Hồng Lâm",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 29,
+    "hoDem": "Trần Văn",
+    "ten": "Lâm",
+    "hoTen": "Trần Văn Lâm",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 30,
+    "hoDem": "Lò Văn",
+    "ten": "Long",
+    "hoTen": "Lò Văn Long",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 31,
+    "hoDem": "Vũ Việt",
+    "ten": "Long",
+    "hoTen": "Vũ Việt Long",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 32,
+    "hoDem": "Nguyễn Tiến",
+    "ten": "Lực",
+    "hoTen": "Nguyễn Tiến Lực",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 33,
+    "hoDem": "Đoàn Duy",
+    "ten": "Mạnh",
+    "hoTen": "Đoàn Duy Mạnh",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 34,
+    "hoDem": "Nguyễn Văn",
+    "ten": "Mạnh",
+    "hoTen": "Nguyễn Văn Mạnh",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 35,
+    "hoDem": "Vũ Duy",
+    "ten": "Mạnh",
+    "hoTen": "Vũ Duy Mạnh",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 36,
+    "hoDem": "Nguyễn Thị Thanh",
+    "ten": "Nhã",
+    "hoTen": "Nguyễn Thị Thanh Nhã",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 37,
+    "hoDem": "Đào Đức",
+    "ten": "Phong",
+    "hoTen": "Đào Đức Phong",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 38,
+    "hoDem": "Vương Trọng Hải",
+    "ten": "Quân",
+    "hoTen": "Vương Trọng Hải Quân",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 39,
+    "hoDem": "Lê Anh",
+    "ten": "Sơn",
+    "hoTen": "Lê Anh Sơn",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 40,
+    "hoDem": "Nguyễn Trung",
+    "ten": "Sơn",
+    "hoTen": "Nguyễn Trung Sơn",
+    "trangThai": "Chưa đăng kí",
+    "registered": false
+  },
+  {
+    "stt": 41,
+    "hoDem": "Nguyễn Minh",
+    "ten": "Sơn",
+    "hoTen": "Nguyễn Minh Sơn",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 42,
+    "hoDem": "Trần Đức",
+    "ten": "Thanh",
+    "hoTen": "Trần Đức Thanh",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 43,
+    "hoDem": "Hoàng Văn",
+    "ten": "Thi",
+    "hoTen": "Hoàng Văn Thi",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 44,
+    "hoDem": "Nguyễn Văn",
+    "ten": "Thuyết",
+    "hoTen": "Nguyễn Văn Thuyết",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 45,
+    "hoDem": "Nguyễn Thành",
+    "ten": "Trung",
+    "hoTen": "Nguyễn Thành Trung",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 46,
+    "hoDem": "Vũ Anh",
+    "ten": "Tuấn",
+    "hoTen": "Vũ Anh Tuấn",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  },
+  {
+    "stt": 47,
+    "hoDem": "Nguyễn",
+    "ten": "Vọng",
+    "hoTen": "Nguyễn Vọng",
+    "trangThai": "Đã đăng kí",
+    "registered": true
+  }
+];
 
-    const tbody = document.getElementById("studentTable");
+    const tableBody = document.getElementById("tableBody");
     const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const emptyState = document.getElementById("emptyState");
     const totalCount = document.getElementById("totalCount");
-    const emptyText = document.getElementById("emptyText");
-    const todayText = document.getElementById("todayText");
+    const doneCount = document.getElementById("doneCount");
+    const waitCount = document.getElementById("waitCount");
 
     function removeVietnameseTones(str) {
       return str
@@ -373,50 +750,78 @@
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/đ/g, "d")
         .replace(/Đ/g, "D")
-        .toLowerCase();
+        .toLowerCase()
+        .trim();
     }
 
-    function renderTable(data) {
-      tbody.innerHTML = "";
-      emptyText.style.display = data.length === 0 ? "block" : "none";
-      totalCount.textContent = data.length;
+    function renderTable() {
+      const keyword = removeVietnameseTones(searchInput.value);
+      const filter = statusFilter.value;
 
-      data.forEach((name, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td class="name">${name}</td>
-          <td><span class="badge">Đã đăng kí</span></td>
-        `;
-        tbody.appendChild(tr);
+      const filtered = people.filter(person => {
+        const matchKeyword = removeVietnameseTones(person.hoTen).includes(keyword);
+        const matchStatus =
+          filter === "all" ||
+          (filter === "done" && person.registered) ||
+          (filter === "wait" && !person.registered);
+
+        return matchKeyword && matchStatus;
       });
+
+      tableBody.innerHTML = filtered.map((person, index) => `
+        <tr>
+          <td class="stt">${index + 1}</td>
+          <td>${person.hoDem}</td>
+          <td><strong>${person.ten}</strong></td>
+          <td class="name">${person.hoTen}</td>
+          <td>
+            <span class="badge ${person.registered ? "done" : "wait"}">
+              <span class="dot"></span>
+              ${person.trangThai}
+            </span>
+          </td>
+        </tr>
+      `).join("");
+
+      emptyState.style.display = filtered.length ? "none" : "block";
+      updateStats(filtered);
     }
 
-    searchInput.addEventListener("input", function () {
-      const keyword = removeVietnameseTones(this.value.trim());
-      const filtered = danhSach.filter(name =>
-        removeVietnameseTones(name).includes(keyword)
-      );
-      renderTable(filtered);
-    });
+    function updateStats(list) {
+      const done = list.filter(item => item.registered).length;
+      const wait = list.length - done;
+
+      totalCount.textContent = list.length;
+      doneCount.textContent = done;
+      waitCount.textContent = wait;
+    }
 
     function exportCSV() {
-      const rows = [["STT", "Ho va ten", "Trang thai"]];
-      danhSach.forEach((name, index) => {
-        rows.push([index + 1, name, "Da dang ki"]);
-      });
+      const header = ["STT", "Họ và đệm", "Tên", "Họ tên đầy đủ", "Trạng thái"];
+      const csvRows = people.map((person, index) => [
+        index + 1,
+        person.hoDem,
+        person.ten,
+        person.hoTen,
+        person.trangThai
+      ]);
 
-      const csvContent = "\uFEFF" + rows.map(row => row.join(",")).join("\n");
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const csvContent = [header, ...csvRows]
+        .map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "danh-sach-da-dang-ki.csv";
+      link.download = "danh-sach-dang-ki-doan.csv";
       link.click();
+      URL.revokeObjectURL(link.href);
     }
 
-    const now = new Date();
-    todayText.textContent = now.toLocaleDateString("vi-VN");
-    renderTable(danhSach);
+    searchInput.addEventListener("input", renderTable);
+    statusFilter.addEventListener("change", renderTable);
+
+    renderTable();
   </script>
 </body>
 </html>
